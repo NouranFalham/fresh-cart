@@ -70,7 +70,7 @@ import { Product } from "@/features/Products/Types/Products.types";
         {/* ================= TAB CONTENT ================= */}
         <div className="p-6 sm:p-8">
             {activeTab === "details" && <ProductsDetailsTab product={product} />}
-            {activeTab === "reviews" && <ReviewsTab />}
+            {activeTab === "reviews" && <ReviewsTab product={product} />}
             {activeTab === "shipping" && <ShippingReturnsTab />}
         </div>
         </div>

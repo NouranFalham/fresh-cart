@@ -8,8 +8,15 @@ import {
     faQuoteLeft,
     faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import ReviewModal from "./ReviewModal";
+import { Product } from "@/features/Products/Types/Products.types";
 
-export default function ReviewsTab() {
+export default function ReviewsTab({product}:{product:Product}) {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const {_id} = product
     return (
         <div className="w-full bg-white rounded-3xl border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.06)] p-10">
 
@@ -33,7 +40,9 @@ export default function ReviewsTab() {
                 Based on 13 verified reviews
                 </p>
 
-                <button className="mt-7 bg-white text-emerald-700 hover:bg-gray-100 transition-all duration-200 px-6 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-md">
+                <button
+                onClick={() => setIsModalOpen(true)}
+                className="mt-7 bg-white text-emerald-700 hover:bg-gray-100 transition-all duration-200 px-6 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-md">
                 <FontAwesomeIcon icon={faPen} />
                 Write a Review
                 </button>
@@ -154,6 +163,11 @@ export default function ReviewsTab() {
             </div>
             </div>
         </div>
+        <ReviewModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        />
         </div>
+        
     );
 };
