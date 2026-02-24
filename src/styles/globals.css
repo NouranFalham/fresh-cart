@@ -61,3 +61,65 @@
     .animate-spin-slow {
     animation: spin-slow 6s linear infinite;
 }
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slideUp {
+    animation: slideUp 0.8s ease forwards;
+}
+
+.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.delay-400 {
+    animation-delay: 0.4s;
+}
+
+@keyframes bgZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+.animate-bgZoom {
+    animation: bgZoom 6s ease-in-out infinite alternate;
+}
+
+@keyframes cardReveal {
+    0% {
+    opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-6px) scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.card-hidden {
+    opacity: 0;
+}
+
+.card-visible {
+    animation: cardReveal 3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 20px;
+}
+

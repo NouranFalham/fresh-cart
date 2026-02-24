@@ -27,9 +27,9 @@ import {
     import Link from "next/link";
     import freshCartLogo from "../../assets/images/freshcart-logo.svg";
     import Image from "next/image";
-    import { usePathname } from "next/navigation";
-    import { useState } from "react";
-import { useSelector } from "react-redux";
+    import { usePathname, useRouter } from "next/navigation";
+    import { useEffect, useState } from "react";
+import {  useSelector } from "react-redux";
 import { AppState } from "@/store/store";
 import useLogout from "@/features/auth/hooks/UseLogOut";
 
@@ -51,6 +51,32 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
 
     const {numOfCartItems} = useSelector((state:AppState)=> state.cart)
     const {count} = useSelector((state:AppState)=> state.wishlist)
+
+    const router = useRouter();
+    const [searchValue, setSearchValue] = useState("");
+
+    function handleSearch() {
+    if (searchValue.trim() !== "") {
+        router.push(`/search?query=${encodeURIComponent(searchValue)}`);
+        setSearchValue("");
+        setIsMenuOpen(false);
+    }
+}
+const [isNavFixed, setIsNavFixed] = useState(false);
+
+useEffect(() => {
+    const handleScroll = () => {
+        // When scrollY > 100px, fix the nav
+        if (window.scrollY > 100) {
+        setIsNavFixed(true);
+        } else {
+        setIsNavFixed(false);
+        }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
         <>
@@ -93,7 +119,14 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
             </ul>
             </div>
             {/* Main Navbar */}
-            <nav className="flex justify-between items-center py-4">
+            <span></span>
+            <nav
+                className={`w-full flex justify-between items-center px-8 py-4 ${
+                    isNavFixed
+                    ? "fixed top-0 left-0  z-[1000] bg-white/95 backdrop-blur-md shadow-md translate-y-0 transition-all duration-400 ease-in-out transform"
+                    : "relative bg-white  "
+            }`}
+            >
             <h1>
                 <Link href="/">
                 <Image src={freshCartLogo} alt="Fresh Cart Logo" />
@@ -103,12 +136,20 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
             <div className="relative hidden lg:block">
                 <input
                 type="text"
+                value={searchValue}
+                onChange={(e)=> setSearchValue(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        handleSearch();
+                    }
+                }}
                 placeholder="Search for products ..."
                 className="form-control min-w-96"
                 />
                 <FontAwesomeIcon
                 icon={faMagnifyingGlass}
-                className="absolute right-1 top-1/2 -translate-1/2"
+                className="absolute right-1 top-1/2 -translate-1/2 cursor-pointer"
+                onClick={handleSearch}
                 />
             </div>
 
@@ -142,43 +183,43 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                         onClick={toggleAccount}
                         className="flex flex-col justify-center items-center gap-1 hover:text-green-500 transition-colors duration-200"
                     >
-                        <FontAwesomeIcon className="text-lg" icon={faUser} />
+                        <FontAwesomeIcon className="text-lg mb-1.5" icon={faUser} />
                         <span className="text-xs">{isAuthenticated && userInfo ? userInfo.name : "Account"}</span>
                     </button>
 
                     {isAccountOpen && (
-                        <div className="absolute right-0 mt-3 w-56 bg-white shadow-lg rounded-xl p-4 z-50">
-                        <ul className="space-y-3 text-sm">
+                        <div className="absolute right-0 mt-3 w-56 bg-white shadow-lg rounded-xl p-3 z-[1200]">
+                        <ul className="space-y-2 text-sm">
                             <li>
-                            <Link href="/profile" className="flex items-center gap-2 hover:text-green-500 transition-colors duration-200">
+                            <Link href="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-green-100 hover:text-green-500 transition-colors duration-200">
                                 <FontAwesomeIcon icon={faUser} />
                                 My Profile
                             </Link>
                             </li>
 
                             <li>
-                            <Link href="/orders" className="flex items-center gap-2 hover:text-green-500 transition-colors duration-200">
+                            <Link href="/orders" className="flex items-center gap-2 p-2 rounded-lg hover:bg-green-100 hover:text-green-500 transition-colors duration-200">
                                 <FontAwesomeIcon icon={faCartShopping} />
                                 My Orders
                             </Link>
                             </li>
 
                             <li>
-                            <Link href="/wishlist" className="flex items-center gap-2 hover:text-green-500 transition-colors duration-200">
+                            <Link href="/wishlist" className="flex items-center gap-2 p-2 rounded-lg hover:bg-green-100 hover:text-green-500 transition-colors duration-200">
                                 <FontAwesomeIcon icon={faHeart} />
                                 My Wishlist
                             </Link>
                             </li>
 
                             <li>
-                            <Link href="/addresses" className="flex items-center gap-2 hover:text-green-500 transition-colors duration-200">
+                            <Link href="/profile/addresses" className="flex items-center gap-2 p-2 rounded-lg hover:bg-green-100 hover:text-green-500 transition-colors duration-200">
                                 <FontAwesomeIcon icon={faAddressCard} />
                                 Addresses
                             </Link>
                             </li>
 
                             <li>
-                            <Link href="/settings" className="flex items-center gap-2 hover:text-green-500 transition-colors duration-200">
+                            <Link href="/profile/settings" className="flex items-center gap-2 p-2 rounded-lg hover:bg-green-100 hover:text-green-500 transition-colors duration-200">
                                 <FontAwesomeIcon icon={faUser} />
                                 Settings
                             </Link>
@@ -199,7 +240,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                     </li>
                 {
                     isAuthenticated? <><li onClick={logout} className="flex flex-col justify-center items-center gap-1 cursor-pointer hover:text-green-500 transition-colors duration-200">
-                <FontAwesomeIcon className="text-lg" icon={faRightFromBracket} />
+                <FontAwesomeIcon className="text-lg mb-1" icon={faRightFromBracket} />
                 <span className="text-xs">Log Out</span>
                 </li></>: <><li>
                 <Link
@@ -229,7 +270,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
         </div>
 
         {/* Categories nav */}
-        <nav className="bg-gray-50 py-4 hidden lg:flex items-center">
+        <nav className="bg-gray-50 py-4 hidden lg:flex items-center z-10 relative">
             <div className="container flex items-center justify-between ">
             <div className="flex gap-8 items-center ">
                 <div className="relative group z-50">
@@ -243,7 +284,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                 </button>
                 <menu className="hidden group-hover:block bg-white absolute top-10 shadow-lg *:p-3 *:hover:bg-gray-200/50 rounded-lg divide-y-2 divide-gray-200">
                     <li>
-                    <Link className="flex gap-2 items-center" href="">
+                    <Link className="flex gap-2 items-center" href={`/search?category=6439d5b90049ad0b52b90048`}>
                         <FontAwesomeIcon
                         className="text-green-500 text-lg"
                         icon={faPerson}
@@ -252,7 +293,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                     </Link>
                     </li>
                     <li>
-                    <Link className="flex gap-2 items-center" href="">
+                    <Link className="flex gap-2 items-center" href={`/search?category=6439d58a0049ad0b52b9003f`}>
                         <FontAwesomeIcon
                         className="text-green-500 text-lg"
                         icon={faPersonDress}
@@ -261,7 +302,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                     </Link>
                     </li>
                     <li>
-                    <Link className="flex gap-2 items-center" href="">
+                    <Link className="flex gap-2 items-center" href={`/search?category=6439d40367d9aa4ca97064cc`}>
                         <FontAwesomeIcon
                         className="text-green-500 text-lg"
                         icon={faBabyCarriage}
@@ -270,7 +311,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                     </Link>
                     </li>
                     <li>
-                    <Link className="flex gap-2 items-center" href="">
+                    <Link className="flex gap-2 items-center" href={`/search?category=6439d30b67d9aa4ca97064b1`}>
                         <FontAwesomeIcon
                         className="text-green-500 text-lg"
                         icon={faSuitcaseMedical}
@@ -279,7 +320,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                     </Link>
                     </li>
                     <li>
-                    <Link className="flex gap-2 items-center" href="">
+                    <Link className="flex gap-2 items-center" href={`/search?category=6439d2d167d9aa4ca970649f`}>
                         <FontAwesomeIcon
                         className="text-green-500 text-lg"
                         icon={faBolt}
@@ -333,7 +374,7 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
                     className="text-green-500 text-lg"
                 />
                 <p className="text-gray-700 text-sm ">
-                    Free Shipping on Orders 500 EGP
+                    Free Shipping On Orders Over 500 EGP
                 </p>
                 </div>
                 <div className="flex items-center gap-1">
@@ -380,6 +421,13 @@ import useLogout from "@/features/auth/hooks/UseLogOut";
             placeholder="Search for products..."
             className="w-full border border-gray-300 rounded-md px-3 py-2 pr-10
             focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        handleSearch();
+                    }
+                }}
             />
             <FontAwesomeIcon
             icon={faMagnifyingGlass}

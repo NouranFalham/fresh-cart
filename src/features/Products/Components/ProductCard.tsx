@@ -51,9 +51,9 @@ export default function ProductCard({info}: {info:Product}) {
         <>
             <div 
                 id="product-card"
-                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition"
+                className="bg-white border h-[430px] border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition flex flex-col flex-grow"
                 >
-                    <div className="relative">
+                    <div className="relative flex-shrink-0">
                         <img src={imageCover} alt={title}
                         className="w-full h-60 object-contain bg-white"
                         />
@@ -75,7 +75,7 @@ export default function ProductCard({info}: {info:Product}) {
                             </Link>
                         </div>
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 flex flex-col flex-grow">
                         <div className="text-xs text-gray-500 mb-1">{category.name}</div>
                         <h3 className="font-medium mb-1 cursor-pointer">
                             <Link className="line-clamp-2" href={`/products/${id}`}>

@@ -34,12 +34,11 @@ function Slider() {
                                 backgroundSize: "cover",
                                 backgroundPosition: "center"
                             }}
-                            className={`h-115 flex items-center justify-center`}>
+                            className={`h-115 flex items-center justify-center animate-bgZoom`}>
                                 <div className="overlay py-20 text-white p-4 w-full h-full bg-linear-to-r from-green-500/90 to-green-400/50">
                                     <div className="container h-full content-center">
-                                        <h2 
-                                        className='text-white text-4xl font-bold mb-4 max-w-96'>Welcome to FreshCart</h2>
-                                        <p> Get 20% off your first order</p>
+                                        <h2 className='text-white text-4xl font-bold mb-4 max-w-96 animate-slideUp'>Welcome to FreshCart</h2>
+                                        <p className='animate-slideUp delay-200'> Get 20% off your first order</p>
 
                                         <div className="mt-4">
                                             <Link 
@@ -65,12 +64,11 @@ function Slider() {
                                 backgroundSize: "cover",
                                 backgroundPosition: "center"
                             }}
-                            className={`h-115 flex items-center justify-center`}>
+                            className={`h-115 flex items-center justify-center animate-bgZoom`}>
                                 <div className="overlay py-20 text-white p-4 w-full h-full bg-linear-to-r from-green-500/90 to-green-400/50">
                                     <div className="container h-full content-center">
-                                        <h2 
-                                        className='text-white text-4xl font-bold mb-4 max-w-96'>Fresh Products Delivered To Your Door</h2>
-                                        <p> Discover The Freshest Groceries With Us</p>
+                                        <h2 className='text-white text-4xl font-bold mb-4 max-w-96 animate-slideUp'>Fresh Products Delivered To Your Door</h2>
+                                        <p className='animate-slideUp delay-200'> Discover The Freshest Groceries With Us</p>
 
                                         <div className="mt-4">
                                             <Link 
@@ -96,12 +94,11 @@ function Slider() {
                                 backgroundSize: "cover",
                                 backgroundPosition: "center"
                             }}
-                            className={`h-115 flex items-center justify-center`}>
+                            className={`h-115 flex items-center justify-center animate-bgZoom`}>
                                 <div className="overlay py-20 text-white p-4 w-full h-full bg-linear-to-r from-green-500/90 to-green-400/50">
                                     <div className="container h-full content-center">
-                                        <h2 
-                                        className='text-white text-4xl font-bold mb-4 max-w-96'> Latest Electronics & Smart Devices</h2>
-                                        <p> Discover The Latest Smart Devices With Us</p>
+                                        <h2 className='text-white text-4xl font-bold mb-4 max-w-96 animate-slideUp'>Latest Electronics & Smart Devices</h2>
+                                        <p className='animate-slideUp delay-200'> Discover The Latest Smart Devices With Us</p>
 
                                         <div className="mt-4">
                                             <Link 
@@ -127,12 +124,11 @@ function Slider() {
                                 backgroundSize: "cover",
                                 backgroundPosition: "center"
                             }}
-                            className={`h-115 flex items-center justify-center`}>
+                            className={`h-115 flex items-center justify-center animate-bgZoom`}>
                                 <div className="overlay py-20 text-white p-4 w-full h-full bg-linear-to-r from-green-500/90 to-green-400/50">
                                     <div className="container h-full content-center">
-                                        <h2 
-                                        className='text-white text-4xl font-bold mb-4 max-w-96'> Shop Our Latest Collection</h2>
-                                        <p> Explore Our Newest Products And Exclusive Deals</p>
+                                        <h2 className='text-white text-4xl font-bold mb-4 max-w-96 animate-slideUp'>Shop Our Latest Collection</h2>
+                                        <p className='animate-slideUp delay-200'> Explore Our Newest Products And Exclusive Deals</p>
 
                                         <div className="mt-4">
                                             <Link 

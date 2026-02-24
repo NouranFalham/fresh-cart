@@ -28,8 +28,7 @@ export default async function OurCategories() {
                         {
                             response.data.map((category)=>(
                                 <Link
-                                href={`/categories/${category._id}`}
-                                key={category._id}
+                                href={`/search?category=${category._id}`} key={category._id}
                                 className="bg-white rounded-lg p-4 text-center shadow-sm hover:shadow-md transition group cursor-pointer">
                                     <div className="h-20 w-20 overflow-hidden bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                                         <Image

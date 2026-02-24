@@ -7,7 +7,7 @@ import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function CategoryCard({info}:{info:Category}) {
-  return (
+    return (
     <div className="group relative rounded-3xl overflow-hidden bg-white/70 backdrop-blur-sm border border-gray-200 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 cursor-pointer">
 
       {/* Image */}

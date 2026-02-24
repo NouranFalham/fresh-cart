@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 export default function DealsBanners() {
+
     return (
         <section className="py-10">
             <div className="container mx-auto">
@@ -13,7 +14,6 @@ export default function DealsBanners() {
                     {/* Deal of the day */}
                     <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-8 text-white transform transition duration-500 hover:scale-[1.02] hover:-translate-y-2 hover:shadow-2xl">
 
-                        {/* Animated background circles */}
                         <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 animate-bounce opacity-70"></div>
 
@@ -62,7 +62,6 @@ export default function DealsBanners() {
                     {/* New Arrivals */}
                     <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-400 to-rose-500 p-8 text-white transform transition duration-500 hover:scale-[1.02] hover:-translate-y-2 hover:shadow-2xl">
 
-                        {/* Animated background circles */}
                         <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 animate-bounce opacity-70"></div>
 

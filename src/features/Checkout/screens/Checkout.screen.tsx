@@ -1,5 +1,5 @@
 "use client"
-import { faArrowLeft, faBox, faReceipt, faShieldAlt, faShoppingBag, faTruck } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBox, faPlus, faReceipt, faShieldAlt, faShoppingBag, faTruck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -7,19 +7,51 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { shippingAddressSchema, shippingAddressValues } from "../Schema/Checkout.schema";
 import ShippingForm from "../components/ShippingForm";
 import PaymentMethods from "../components/PaymentMethods";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "@/store/store";
 import { createOnlineOrder, createOrderCash } from "../server/Checkout.action";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { clearCart } from "@/features/cart/store/Cart.slice";
+import { AddressData } from "@/features/Profile/types/address.type";
+import { getAllUserAddresses } from "@/features/Profile/server/address.action";
+import AddressCard from "@/features/Profile/component/AddressCard";
 
 export default function CheckoutScreen() {
     const dispatch = useDispatch()
     const router = useRouter()
     const [paymentMethod , setPaymentMethod]= useState<'cash' | 'card'>('cash')
     const {cartId} = useSelector((state:AppState)=> state.cart)
+
+    const [addresses, setAddresses] = useState<AddressData[]>([]);
+    const [loadingAddresses, setLoadingAddresses] = useState(true);
+    const [selectedAddress, setSelectedAddress] = useState<AddressData | null>(null);
+    const [useNewAddress, setUseNewAddress] = useState(false);
+
+    async function fetchAddresses() {
+    setLoadingAddresses(true);
+        try {
+        const response = await getAllUserAddresses();
+        setAddresses(response.data);
+        if (response.data.length === 0) {
+            setUseNewAddress(true);
+        } else {
+            setSelectedAddress(response.data[0]);
+            setUseNewAddress(false);
+        }
+        } catch (error) {
+        setUseNewAddress(true);
+        console.error(error);
+        } finally {
+        setLoadingAddresses(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchAddresses();
+    }, []);
+
 
     const {register , handleSubmit, reset , formState: {errors}} = useForm({
         defaultValues: {
@@ -32,38 +64,46 @@ export default function CheckoutScreen() {
         
     })
 
-    const onSubmit:SubmitHandler<shippingAddressValues> = async(values)=>{
-        try {
-            if(!cartId){
-                return;
+    const onSubmit: SubmitHandler<shippingAddressValues> = async (values) => {
+    try {
+        if (!cartId) return;
+
+    const shippingAddress = selectedAddress
+        ? {
+            city: selectedAddress.city,
+            details: selectedAddress.details,
+            phone: selectedAddress.phone,
             }
-            if(paymentMethod === 'cash'){
-                const response = await createOrderCash({cartId , shippingAddress:values})
-                console.log(response);
-                if(response.status === 'success'){
-                    dispatch(clearCart())
-                    toast.success('Order created successfully')
-                    reset()
-                    setTimeout(()=>{
-                        router.push('/orders')
-                    },3000)
-                }
-                
-            }
-            else {
-                const response = await createOnlineOrder({cartId , shippingAddress:values, url:location.origin})
-                console.log(response);
-                if(response.status === 'success'){
-                    dispatch(clearCart())
-                    toast.loading('Redirecting to payment gateway...')
-                    setTimeout(()=>{location.href = response.session.url},3000)
-                }
-            }
-        } catch (error) {
-            
+        : values;
+
+        if (paymentMethod === "cash") {
+        const response = await createOrderCash({ cartId, shippingAddress });
+        if (response.status === "success") {
+            dispatch(clearCart());
+            toast.success("Order created successfully");
+            reset();
+            setTimeout(() => {
+            router.push("/orders");
+            }, 3000);
         }
-        
+        } else {
+        const response = await createOnlineOrder({
+            cartId,
+            shippingAddress,
+            url: location.origin,
+        });
+        if (response.status === "success") {
+            dispatch(clearCart());
+            toast.loading("Redirecting to payment gateway...");
+            setTimeout(() => {
+            location.href = response.session.url;
+            }, 3000);
+        }
+        }
+    } catch (error) {
+        toast.error("Failed to create order");
     }
+    };
 
 
     return (
@@ -113,8 +153,49 @@ export default function CheckoutScreen() {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             {/* Left Column Form */}
                             <div className="lg:col-span-2 space-y-6">
-                                <ShippingForm register={register} errors={errors}/>
-                                <PaymentMethods selectedMethod={paymentMethod} changeMethod={setPaymentMethod}/>
+                            {loadingAddresses ? (
+                                <p>Loading addresses...</p>
+                            ) : (!useNewAddress && addresses.length > 0) ? (
+                                <>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    {addresses.map((address) => (
+                                    <div
+                                        key={address._id}
+                                        className={`p-4 border rounded-xl cursor-pointer ${
+                                        selectedAddress?._id === address._id
+                                            ? "border-green-600 bg-green-50"
+                                            : "border-gray-200"
+                                        }`}
+                                        onClick={() => setSelectedAddress(address)}
+                                    >
+                                        <AddressCard
+                                        address={address}
+                                        onDelete={() => fetchAddresses()}
+                                        onEdit={() => {}}
+                                        />
+                                    </div>
+                                    ))}
+                                </div>
+
+                                {/* Use New Address Button */}
+                                <button
+                                    type="button"
+                                    className="mt-6 inline-flex items-center gap-2 text-green-600 font-semibold"
+                                    onClick={() => {
+                                    setUseNewAddress(true);
+                                    setSelectedAddress(null);
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                    Use New Address
+                                </button>
+                                </>
+                            ) : (
+                                // Show Shipping Form when no addresses or user wants to add new address
+                                <ShippingForm register={register} errors={errors} />
+                            )}
+
+                            <PaymentMethods selectedMethod={paymentMethod} changeMethod={setPaymentMethod} />
                             </div>
                             {/* Right Column Order Summary */}
                             <div className="lg:col-span-1">

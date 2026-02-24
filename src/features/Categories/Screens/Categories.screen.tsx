@@ -1,12 +1,31 @@
+"use client"
 import Link from "next/link";
 import { getAllCategories } from "../Servers/Categories.action";
 import CategoryCard from "../Components/CategoryCard";
 import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-export default async function CategoriesScreen() {
+import { useEffect, useState } from "react";
+import { Category } from "../Types/Categories.types";
+import CategoryCardSkeleton from "../Components/CategoryCardSkeleton";
+export default function CategoriesScreen() {
 
-    const response = await getAllCategories()
-    const {data} = response
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+    async function fetchCategories() {
+        try {
+            const response = await getAllCategories();
+            setCategories(response.data);
+        } catch (error) {
+            console.error("Failed to fetch categories:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    fetchCategories();
+    }, []);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -58,11 +77,16 @@ export default async function CategoriesScreen() {
         {/* GRID */}
         <section className="px-8 md:px-20 py-20">
             <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {data.map((category, index) => (
-                <Link href={`/categories/${category._id}`}>
-                    <CategoryCard info={category} key={index}/>
-                </Link>
-            ))}
+            {loading
+            ? Array.from({ length: 10 }).map((item, index) => (
+                <CategoryCardSkeleton key={index} />
+                ))
+                : categories.map((category) => (
+                    <Link href={`/search?category=${category._id}`} key={category._id}>
+                        <CategoryCard info={category} />
+                    </Link>
+                ))
+            }
             </div>
         </section>
         </div>

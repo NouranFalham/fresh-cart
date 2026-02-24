@@ -29,7 +29,7 @@ import { verifyToken } from "@/features/auth/server/Token.action";
 import { AuthState } from '../features/auth/store/auth.slice';
 import { preloadedState } from '../store/store';
 import { getLoggedUserCart } from "@/features/cart/server/cart.action";
-import { CartState } from "@/features/cart/store/Cart.slice";
+import { CartState, setCartInfo } from "@/features/cart/store/Cart.slice";
 import { getLoggedUserWishlist } from "@/features/wishlist/server/Wishlist.action";
 import { WishlistState } from "@/features/wishlist/store/Wishlist.slice";
 const exo = Exo({

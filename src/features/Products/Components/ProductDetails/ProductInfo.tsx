@@ -9,6 +9,11 @@ import ImageGallery from "react-image-gallery";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { addProductToCart } from "@/features/cart/server/cart.action";
+import { useDispatch, useSelector } from "react-redux";
+import { addProductToWishlist, removeProductFromWishlist } from "@/features/wishlist/server/Wishlist.action";
+import { addWishlistItem, removeWishlistItem } from "@/features/wishlist/store/Wishlist.slice";
+import { AppState } from "@/store/store";
+import { setCartInfo } from "@/features/cart/store/Cart.slice";
 
 export default function ProductInfo({product}:{product:Product}) {
     const {
@@ -30,18 +35,46 @@ export default function ProductInfo({product}:{product:Product}) {
     const discountPercentage = priceAfterDiscount? Math.round((price - priceAfterDiscount)/price * 100) : null
     const isLowStock = quantity >0 && quantity < 10;
     const [counter, setCounter] = useState(1)
+    const [localAdded, setLocalAdded] = useState(false)
 
-    const handleAddToCart = async ()=> {
-            try {
-                const response = await addProductToCart({productId:id})
-                // console.log(response);
-                if(response.status === 'success'){
-                    toast.success (response.message)
-                }
-            } catch (error) {
-                toast.error('Failed to add product to cart, please login first')
+    const dispatch = useDispatch()
+
+    const wishlistItems = useSelector((state: AppState) => state.wishlist.data)
+    const isInWishlist = wishlistItems.some(item => item.id === id)
+
+    const products = useSelector((state: AppState) => state.cart.products)
+    const isInCartFromStore = products.some(item => item.product.id === id)
+    const isInCart = isInCartFromStore || localAdded
+
+    const handleToggleWishlist = async () => {
+        try {
+            if (isInWishlist) {
+                await removeProductFromWishlist({ productId: id })
+                dispatch(removeWishlistItem({ id }))
+                toast.success("Removed from wishlist")
+            } else {
+                await addProductToWishlist({ productId: id })
+                dispatch(addWishlistItem(product as any))
+                toast.success("Added to wishlist")
             }
+        } catch (error) {
+            toast.error("Please login first")
         }
+    }
+
+    const handleAddToCart = async () => {
+        try {
+            const response = await addProductToCart({ productId: id })
+
+            if (response.status === "success") {
+            dispatch(setCartInfo(response))
+            setLocalAdded(true)  
+            toast.success("Added to cart")
+            }
+        } catch (error) {
+            toast.error("Please login first")
+        }
+    }
 
     return <>
         <section id="product-detail" className="py-6">
@@ -170,11 +203,18 @@ export default function ProductInfo({product}:{product:Product}) {
                             <button
                             id="add-to-cart"
                             onClick={handleAddToCart}
-                            className="flex-1 text-white py-3.5 px-6 rounded-xl font-medium hover:bg-green-600 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 bg-green-500">
-                                <>
-                                    <FontAwesomeIcon icon={faCartShopping}/>
-                                    Add to Cart
-                                </>
+                            disabled={isInCart}
+                            className={`flex-1 py-3.5 px-6 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg
+                                ${
+                                isInCart
+                                    ? "bg-gray-200 text-green-600 cursor-not-allowed shadow-none"
+                                    : "bg-green-500 text-white hover:bg-green-600 active:scale-[0.98] shadow-green-500/25"
+                                }
+                            `}
+                            >
+                            <FontAwesomeIcon icon={faCartShopping} />
+
+                            {isInCart ? "Added to Cart ✓" : "Add to Cart"}
                             </button>
                             <button
                             id="buy-now"
@@ -188,13 +228,16 @@ export default function ProductInfo({product}:{product:Product}) {
                         {/* Wishlist */}
                         <div className="flex gap-3 mb-6">
                             <button
-                            id="wishlist-button"
-                            className="flex-1 border-2 py-3 px-4 rounded-xl font-medium transition duration-200 flex items-center justify-center gap-2 border-gray-200 text-gray-700 hover:border-green-300 hover:text-green-500">
-                                <FontAwesomeIcon icon={faHeart}/>
-                            </button>
-                            <button
-                            className="border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:border-green-300 hover:text-green-600 transition duration-200">
-                                <FontAwesomeIcon icon={faShareNodes}/>
+                                id="wishlist-button"
+                                onClick={handleToggleWishlist}
+                                className={`flex-1 border-2 py-3 px-4 rounded-xl font-medium transition duration-200 flex items-center justify-center gap-2
+                                ${
+                                    isInWishlist
+                                    ? "bg-red-500 text-white border-red-500"
+                                    : "border-gray-200 text-gray-700 hover:border-green-300 hover:text-green-500"
+                                }`}
+                            >
+                                <FontAwesomeIcon icon={faHeart} />
                             </button>
                         </div>
                         {/* trust badges */}

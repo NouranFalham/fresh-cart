@@ -1,7 +1,9 @@
+import BrandsScreen from "@/features/Brands/Screens/Brand.screen";
+
 export default function BrandsPage() {
     return (
         <>    
-            <h1>Brands Page</h1>   
+            <BrandsScreen/>   
         </>
     )
 }

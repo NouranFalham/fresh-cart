@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 export default function WishlistLoadingScreen() {
-    // Helper for animated skeleton blocks
     const Skeleton = ({ className }: { className: string }) => (
         <div
             className={`bg-gray-200 rounded-md animate-pulse ${className}`}

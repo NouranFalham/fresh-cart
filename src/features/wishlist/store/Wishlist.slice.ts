@@ -34,9 +34,16 @@ const wishlistSlice = createSlice({
     setWishlistLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload
         },
+        addWishlistItem: (state, action: PayloadAction<Product>) => {
+            const exists = state.data.find(item => item.id === action.payload.id)
+            if (!exists) {
+                state.data.push(action.payload)
+                state.count = state.data.length
+            }
+        },
 
     }
 })
 
 export const wishlistReducer = wishlistSlice.reducer
-export const {setWishlistInfo , removeWishlistItem , setWishlistLoading} = wishlistSlice.actions
+export const {setWishlistInfo , removeWishlistItem , setWishlistLoading , addWishlistItem} = wishlistSlice.actions
