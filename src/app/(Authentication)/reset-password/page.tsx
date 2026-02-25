@@ -1,7 +1,9 @@
+import ResetPasswordScreen from "@/features/auth/screens/resetPasswordScreen";
+
 export default function ResetPasswordPage() {
     return (
         <>    
-            <h1>Reset Password Page</h1>   
+            <ResetPasswordScreen/>  
         </>
     )
 }

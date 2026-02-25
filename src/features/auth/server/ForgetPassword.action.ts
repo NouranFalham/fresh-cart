@@ -33,3 +33,20 @@ export async function verifyCode(resetCode: string) {
         throw error
     }
 }
+
+export async function resetPassword(email: string, newPassword: string) {
+    try {
+        const options: AxiosRequestConfig = {
+            method: 'PUT',
+            url: 'https://ecommerce.routemisr.com/api/v1/auth/resetPassword',
+            data: { 
+                email,
+                newPassword
+            }
+        }
+        const response = await axios.request(options)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}

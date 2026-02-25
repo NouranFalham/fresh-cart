@@ -1,15 +1,16 @@
 "use client"
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShieldAlt } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { verifyCode } from "../../server/ForgetPassword.action";
+import { useEffect, useState } from "react";
+import ForgetPassword, { verifyCode } from "../../server/ForgetPassword.action";
+import { useRouter } from "next/navigation";
 
 export default function VerifyCodeForm({ email }: { email: string }) {
+    const router = useRouter();
 
     const [codeDigits, setCodeDigits] = useState<string[]>(Array(6).fill(""));
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [counter, setCounter] = useState(0);
 
     const resetCode = codeDigits.join("");
 
@@ -29,26 +30,57 @@ export default function VerifyCodeForm({ email }: { email: string }) {
 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (resetCode.length < 6 || resetCode.includes("")) {
+    if (codeDigits.some(digit => digit === "")) {
         setMessage("Please enter all 6 digits.");
         return;
-        }
+    }
         setLoading(true);
         setMessage("");
         try {
         await verifyCode(resetCode);
-        setMessage("Code verified! You can now reset your password.");
-        // Redirect to reset password page if needed
-        // router.push(`/reset-password?code=${resetCode}&email=${encodeURIComponent(email)}`);
-        } catch (err: any) {
-        setMessage(err?.response?.data?.message || "Verification failed. Please try again.");
+        router.push(`/reset-password?email=${encodeURIComponent(email)}`);
+        } catch (error) {
+        setMessage("Verification failed. Please check the code and try again.");
         } finally {
         setLoading(false);
         }
     };
 
+    const handleResend = async () => {
+        if (!email) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setMessage("");
+
+            await ForgetPassword(email);
+            setMessage("A new verification code has been sent.");
+            setCounter(60);
+
+            setMessage("A new verification code has been sent.");
+        } catch (error: any) {
+            setMessage(
+                "Failed to resend code. Please try again later."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (counter === 0) return;
+
+        const timer = setInterval(() => {
+            setCounter((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [counter]);
+
     return (
-        <section className=" bg-white rounded-3xl p-10 shadow-lg">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 shadow-lg">
         <h1 className="text-3xl font-extrabold text-center mb-1">
             <span className="text-green-600">Fresh</span>Cart
         </h1>
@@ -58,7 +90,7 @@ export default function VerifyCodeForm({ email }: { email: string }) {
         </p>
 
         {/* Step Indicator */}
-        <div className="flex justify-center items-center mb-10 space-x-6">
+        <div className="flex justify-center items-center mb-10 space-x-2 sm:space-x-6">
             <StepCircle filled={true} icon="check" />
             <StepLine filled={true} />
             <StepCircle filled={true} icon="key" />
@@ -67,7 +99,8 @@ export default function VerifyCodeForm({ email }: { email: string }) {
         </div>
 
         {/* Verification Code Inputs */}
-        <form onSubmit={handleSubmit} className="flex justify-between space-x-3 mb-6">
+        <form onSubmit={handleSubmit} className=" space-x-3 mb-6">
+        <div className="flex justify-between gap-2 sm:gap-3">
         {codeDigits.map((digit, i) => (
             <input
                 key={i}
@@ -77,39 +110,45 @@ export default function VerifyCodeForm({ email }: { email: string }) {
                 maxLength={1}
                 value={digit}
                 onChange={(e) => handleChange(e, i)}
-                className="w-12 h-14 text-center text-xl font-semibold border border-gray-300 rounded-lg
-                focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                className="w-10 sm:w-12 h-12 sm:h-14 text-center text-lg sm:text-xl font-semibold border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 aria-label={`Digit ${i + 1}`}
             />
             ))}
+        </div>
+
+            {message && (
+            <p className={`text-center mb-4 mt-2 text-sm sm:text-base ${message.includes("failed") ? "text-red-600" : "text-green-600"}`}>
+                {message}
+            </p>)}
+
+            {/* Resend code */}
+            <p className="text-center text-sm text-gray-600 mb-4 mt-4">
+                Didn't receive the code?{" "}
+                <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={counter > 0 || loading}
+                    className="text-green-600 font-semibold hover:underline disabled:opacity-50"
+                >
+                    {counter > 0 ? `Resend in ${counter}s` : "Resend Code"}
+                </button>
+            </p>
+
+            {/* Verify button */}
+            <button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 sm:py-4 rounded-lg
+                shadow-lg transition-transform duration-300"
+            >
+                Verify Code
+            </button>
         </form>
-        {message && (
-        <p className={`text-center mb-4 ${message.includes("failed") ? "text-red-600" : "text-green-600"}`}>
-            {message}
-        </p>)}
-
-        {/* Resend code */}
-        <p className="text-center text-sm text-gray-600 mb-8">
-            Didn't receive the code?{" "}
-            <Link href="#" className="text-green-600 font-semibold hover:underline">
-            Resend Code
-            </Link>
-        </p>
-
-        {/* Verify button */}
-        <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg
-            shadow-lg transition-transform duration-300 hover:scale-105"
-        >
-            Verify Code
-        </button>
 
         {/* Change email link */}
         <div className="mt-6 text-center">
             <Link href="/forget-password" className="inline-flex items-center text-gray-600 hover:text-green-600">
             <svg
-                className="w-5 h-5 mr-2 transform rotate-180"
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2 transform rotate-180"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"

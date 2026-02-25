@@ -34,7 +34,7 @@ export default function ForgetPasswordForm() {
         await ForgetPassword(data.email);
         setMessage("Reset code sent! Check your email.");
         setTimeout(() => {
-            router.push('/verifyCode');
+            router.push(`/verifyCode?email=${encodeURIComponent(data.email)}`);
         }, 2000);
         } catch (error: any) {
         setMessage(error?.response?.data?.message || "Something went wrong.");
@@ -127,7 +127,7 @@ export default function ForgetPasswordForm() {
             </Link>
         </div>
 
-        <p className="mt-12 text-center text-gray-600">
+        <p className="mt-2 text-center text-gray-600">
             Remember your password?{" "}
             <Link href="/login" className="text-green-600 font-semibold hover:underline">
             Sign In
