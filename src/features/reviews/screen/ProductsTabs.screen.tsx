@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faBoxOpen,
@@ -11,11 +11,25 @@ import ProductsDetailsTab from "../components/ProductsDetailsTab";
 import ReviewsTab from "../components/ReviewsTab";
 import ShippingReturnsTab from "../components/ShippingReturns";
 import { Product } from "@/features/Products/Types/Products.types";
+import { getReviews } from "../server/reviews.action";
 
     type TabType = "details" | "reviews" | "shipping";
 
     export default function ProductTabsScreen({ product }: { product: Product }) {
     const [activeTab, setActiveTab] = useState<TabType>("details");
+    const [reviewsCount, setReviewsCount] = useState<number>(product.ratingsQuantity || 0);
+
+    useEffect(() => {
+    async function fetchReviewsCount() {
+        try {
+            const response = await getReviews({ id: product._id });
+            setReviewsCount(response.data?.length || 0);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+        fetchReviewsCount();
+    }, [product._id]);
 
     const tabs = [
         {
@@ -25,7 +39,7 @@ import { Product } from "@/features/Products/Types/Products.types";
         },
         {
         id: "reviews",
-        label: "Reviews (5)",
+        label: `Reviews (${reviewsCount})`,
         icon: faStar,
         },
         {
@@ -70,7 +84,7 @@ import { Product } from "@/features/Products/Types/Products.types";
         {/* ================= TAB CONTENT ================= */}
         <div className="p-6 sm:p-8">
             {activeTab === "details" && <ProductsDetailsTab product={product} />}
-            {activeTab === "reviews" && <ReviewsTab product={product} />}
+            {activeTab === "reviews" && <ReviewsTab product={product} onReviewsChange={(count: number) => setReviewsCount(count)}  />}
             {activeTab === "shipping" && <ShippingReturnsTab />}
         </div>
         </div>

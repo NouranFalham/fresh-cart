@@ -3,17 +3,23 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { createReview } from "../server/reviews.action";
+import { toast } from "react-toastify";
 
 interface ReviewModalProps {
     isOpen: boolean;
     onClose: () => void;
+    productId: string;
+    onReviewAdded?: () => void; 
     }
 
-    export default function ReviewModal({ isOpen, onClose }: ReviewModalProps) {
+    export default function ReviewModal({ isOpen, onClose, productId , onReviewAdded }: ReviewModalProps) {
         type RatingValue = 0 | 1 | 2 | 3 | 4 | 5;
         const [rating, setRating] = useState<RatingValue>(0);
         const [hover, setHover] = useState<RatingValue>(0);
         const [review, setReview] = useState("");
+        const [loading, setLoading] = useState(false);
+
 
     if (!isOpen) return null;
 
@@ -25,13 +31,30 @@ interface ReviewModalProps {
         5: "Excellent",
     };
 
-    const handleSubmit = () => {
-        console.log({ rating, review });
+    const handleSubmit = async () => {
+        if (!rating || !review) return;
 
-        setRating(0);
-        setReview("");
-        onClose();
-    };
+        try {
+            setLoading(true);
+            await createReview({
+            id: productId,
+            values: {
+                rating,
+                review,
+            },
+            });
+            toast.success("Review submitted successfully!");
+            setRating(0);
+            setReview("");
+            onClose();
+            onReviewAdded?.();
+
+        } catch (error) {
+            toast.error("Failed to submit review.");
+        } finally {
+            setLoading(false);
+        }
+        };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
@@ -75,10 +98,10 @@ interface ReviewModalProps {
                 </div>
 
                 {rating !== 0 && (
-    <span className="text-sm font-medium text-gray-600">
-        {ratingLabels[rating]}
-    </span>
-    )}
+                <span className="text-sm font-medium text-gray-600">
+                    {ratingLabels[rating]}
+                </span>
+                )}
             </div>
             </div>
 
@@ -112,14 +135,14 @@ interface ReviewModalProps {
 
             <button
                 onClick={handleSubmit}
-                disabled={!rating || !review}
+                disabled={!rating || !review || loading}
                 className={`px-6 py-2.5 rounded-xl font-medium transition ${
-                rating && review
+                    rating && review && !loading
                     ? "bg-emerald-600 text-white hover:bg-emerald-700"
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
-            >
-                Submit Review
+                >
+                {loading ? "Submitting..." : "Submit Review"}
             </button>
             </div>
         </div>
