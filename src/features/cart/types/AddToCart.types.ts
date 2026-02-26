@@ -10,8 +10,8 @@
     _id: string;
     cartOwner: string;
     products: CartProduct[];
-    createdAt: string;   // ISO date string
-    updatedAt: string;   // ISO date string
+    createdAt: string;   
+    updatedAt: string;   
     __v: number;
     totalCartPrice: number;
     }
@@ -19,6 +19,6 @@
     export interface CartProduct {
     count: number;
     _id: string;
-    product: string;  // product ID
+    product: string;  
     price: number;
 }

@@ -13,7 +13,7 @@ import { Category } from "../Types/Categories.types";
 import CategoryDetailsCardSkeleton from "../Components/CategoryCardDetailsSkeleton";
 
 interface Props {
-  id: string;
+    id: string;
 }
 
 export default function CategoryDetailsScreen({ id }: Props) {

@@ -33,7 +33,7 @@ export default function CategoriesScreen() {
         {/* HERO */}
         <section className="relative w-full py-10 px-6 md:px-20 bg-gradient-to-r from-emerald-600 via-green-500 to-teal-500 text-white overflow-hidden">
 
-    {/* Soft Glow Background */}
+    {/* Background */}
     <div className="absolute w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl -top-32 -right-20" />
 
     <div className="relative z-10 max-w-6xl mx-auto flex items-center gap-8">
@@ -49,7 +49,6 @@ export default function CategoriesScreen() {
 
         {/* Text Content */}
         <div>
-        {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm opacity-90 mb-4">
             <Link href="/" className="hover:underline">
             Home

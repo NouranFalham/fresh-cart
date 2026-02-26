@@ -6,8 +6,12 @@ import ProductInfoSkeleton from "../Components/ProductInfoSkeleton";
 import { Product } from "../Types/Products.types";
 import SimilarProductsSwiper from "../Components/ProductDetails/SimilarProducts";
 import ProductTabsScreen from "@/features/reviews/screen/ProductsTabs.screen";
+import { getLoggedUserWishlist } from "@/features/wishlist/server/Wishlist.action";
+import { setWishlistInfo } from "@/features/wishlist/store/Wishlist.slice";
+import { useDispatch } from "react-redux";
 
 export default function ProductDetailsScreen({ productId }: { productId: string }) {
+    const dispatch = useDispatch();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
@@ -36,6 +40,21 @@ export default function ProductDetailsScreen({ productId }: { productId: string 
 
         fetchProduct();
     }, [productId]);
+
+
+      
+        useEffect(() => {
+        const fetchWishlist = async () => {
+            try {
+            const wishlist = await getLoggedUserWishlist();
+            dispatch(setWishlistInfo(wishlist));
+            } catch (error) {
+            console.log("No wishlist yet");
+            }
+        };
+
+        fetchWishlist();
+        }, []);
 
     return (
     <>

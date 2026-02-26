@@ -28,12 +28,13 @@ import {
     import freshCartLogo from "../../assets/images/freshcart-logo.svg";
     import Image from "next/image";
     import { usePathname, useRouter } from "next/navigation";
-    import { useEffect, useState } from "react";
+    import { useEffect, useRef, useState } from "react";
 import {  useSelector } from "react-redux";
 import { AppState } from "@/store/store";
 import useLogout from "@/features/auth/hooks/UseLogOut";
 
     export default function Navbar() {
+    const accountRef = useRef<HTMLLIElement>(null);
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     function toggleAccount() {
     setIsAccountOpen(!isAccountOpen);
@@ -66,7 +67,6 @@ const [isNavFixed, setIsNavFixed] = useState(false);
 
 useEffect(() => {
     const handleScroll = () => {
-        // When scrollY > 100px, fix the nav
         if (window.scrollY > 100) {
         setIsNavFixed(true);
         } else {
@@ -78,50 +78,30 @@ useEffect(() => {
     return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (accountRef.current && !accountRef.current.contains(event.target as HTMLElement)) {
+                setIsAccountOpen(false); 
+            }
+        };
+
+        if (isAccountOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isAccountOpen]);
+
+
     return (
         <>
         <div className="container">
-            {/* Top Navbar */}
-            <div className="hidden lg:flex text-sm items-center justify-between py-2 border-b border-gray-300/30">
-            <ul className="flex gap-5 items-center *:flex *:gap-2 *:items-center">
-                <li>
-                <FontAwesomeIcon icon={faPhone} />
-                <a href="tel:+1 (800) 123-4567">+1 (800) 123-4567</a>
-                </li>
-                <li>
-                <FontAwesomeIcon icon={faEnvelope} />
-                <a href="mailto:support@freshcart.com">support@freshcart.com</a>
-                </li>
-            </ul>
-
-            <ul className="flex gap-5 items-center">
-                <li>
-                <Link href={"about"}>About</Link>
-                </li>
-                <li>
-                <Link href={"contact"}>Contact</Link>
-                </li>
-
-                <li>
-                <select>
-                    <option>EGP</option>
-                    <option>SAR</option>
-                    <option>AED</option>
-                </select>
-                </li>
-
-                <li>
-                <select>
-                    <option value="en">English</option>
-                    <option value="ar">العربية</option>
-                </select>
-                </li>
-            </ul>
-            </div>
+            
             {/* Main Navbar */}
-            <span></span>
             <nav
-                className={`w-full flex justify-between items-center px-8 py-4 ${
+                className={`w-full flex justify-between items-center px-8 py-4  ${
                     isNavFixed
                     ? "fixed top-0 left-0  z-[1000] bg-white/95 backdrop-blur-md shadow-md translate-y-0 transition-all duration-400 ease-in-out transform"
                     : "relative bg-white  "
@@ -134,23 +114,21 @@ useEffect(() => {
             </h1>
 
             <div className="relative hidden lg:block">
-                <input
+            <input
                 type="text"
                 value={searchValue}
-                onChange={(e)=> setSearchValue(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        handleSearch();
-                    }
-                }}
-                placeholder="Search for products ..."
-                className="form-control min-w-96"
-                />
-                <FontAwesomeIcon
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                placeholder="Search for products..."
+                className="min-w-[380px] px-5 py-3 rounded-full bg-white border border-gray-300 shadow-sm
+                        text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400
+                        focus:border-green-500 transition-all duration-300 hover:shadow-md"
+            />
+            <FontAwesomeIcon
                 icon={faMagnifyingGlass}
-                className="absolute right-1 top-1/2 -translate-1/2 cursor-pointer"
                 onClick={handleSearch}
-                />
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-green-600 cursor-pointer transition-colors duration-300"
+            />
             </div>
 
             <ul className="hidden lg:flex gap-6 items-center">
@@ -178,7 +156,7 @@ useEffect(() => {
                     <span className="text-xs">Cart</span>
                 </Link>
                 </li>
-                <li className="relative">
+                <li className="relative" ref={accountRef}>
                     <button
                         onClick={toggleAccount}
                         className="flex flex-col justify-center items-center gap-1 hover:text-green-500 transition-colors duration-200"
@@ -270,7 +248,7 @@ useEffect(() => {
         </div>
 
         {/* Categories nav */}
-        <nav className="bg-gray-50 py-4 hidden lg:flex items-center z-10 relative">
+        <nav className="bg-gray-50 py-4 hidden lg:flex items-center z-50 relative">
             <div className="container flex items-center justify-between ">
             <div className="flex gap-8 items-center ">
                 <div className="relative group z-50">

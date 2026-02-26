@@ -64,19 +64,3 @@ export default async function loginAction(values:loginFormValues){
         }
     }
 }
-// data response.data
-// {
-//     "message": "success",
-//     "user": {
-//         "name": "nouran",
-//         "email": "nouran2@gmail.com",
-//         "role": "user"
-//     },
-//     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2I1ZjI5ODAzZTg4OGUwNTJhZDIxMCIsIm5hbWUiOiJBaG1lZCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzcwMzQ3MTkzLCJleHAiOjE3NzgxMjMxOTN9.hZvR8fyfm1zJKcH5Tck6xvauwCTVHAZc6hhezNHd8YA"
-// }
-
-// Error
-// {
-//     "statusMsg": "fail",
-//     "message": "Incorrect email or password"
-// }

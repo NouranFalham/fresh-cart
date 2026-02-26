@@ -1,4 +1,3 @@
-import { icon } from "@fortawesome/fontawesome-svg-core"
 import { faHeadset, faShieldAlt, faTruck, faUndo } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 

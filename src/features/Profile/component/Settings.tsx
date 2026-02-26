@@ -11,6 +11,8 @@ import { updateUserDataSchema } from "../Schema/UpdateUserDataSchema";
 import { UpdateLoggedUserData } from "../server/settings.action";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 
 export default function Settings() {
@@ -20,6 +22,8 @@ export default function Settings() {
     const { register, handleSubmit, formState: { errors } , setError , reset } = useForm<UserUpdate>({
             resolver: zodResolver(updateUserDataSchema),
     })
+
+    const router = useRouter();
 
     useEffect(() => {
     if (userInfo) {
@@ -44,6 +48,7 @@ export default function Settings() {
 
             if(response.message=== 'success'){
                 toast.success("User data updated successfully")
+                router.push('/login');
             }
         } catch (error: any) {
             toast.error("Failed to update user data");
@@ -138,25 +143,25 @@ export default function Settings() {
                 {/* Save Button */}
                 <div>
                 
-<button
-    type="submit"
-    disabled={isSubmitting}
-    className={`group relative inline-flex items-center gap-3 px-7 py-3 rounded-3xl text-white font-semibold shadow-lg transition-all duration-300 
-    ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-green-600 to-emerald-500 hover:shadow-2xl"}`}
->
-    {isSubmitting ? (
-        <>
-            <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
-            Saving...
-        </>
-    ) : (
-        <>
-            <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition rounded-3xl"></span>
-            <FontAwesomeIcon icon={faFloppyDisk} className="relative z-10" />
-            <span className="relative z-10">Save Changes</span>
-        </>
-    )}
-</button>
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`group relative inline-flex items-center gap-3 px-7 py-3 rounded-3xl text-white font-semibold shadow-lg transition-all duration-300 
+                    ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-green-600 to-emerald-500 hover:shadow-2xl"}`}
+                >
+                    {isSubmitting ? (
+                        <>
+                            <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
+                            Saving...
+                        </>
+                    ) : (
+                        <>
+                            <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition rounded-3xl"></span>
+                            <FontAwesomeIcon icon={faFloppyDisk} className="relative z-10" />
+                            <span className="relative z-10">Save Changes</span>
+                        </>
+                    )}
+                </button>
                 </div>
             </form>
 

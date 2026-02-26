@@ -2,8 +2,7 @@
 import { faCheck, faMinus, faPlug, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { CartProduct, Product } from '../types/GetLoggedUserCart.types';
-import { useState } from "react";
+import { CartProduct} from '../types/GetLoggedUserCart.types';
 import Swal from 'sweetalert2'
 import { removeProductFromCart, updateProductQuantity } from "../server/cart.action";
 import { toast } from "react-toastify";
@@ -75,16 +74,16 @@ export default function CartItem({info}: {info:CartProduct}) {
 
     return (
         <>
-            <div className="relative bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all duration-200">
+            <div className="relative bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all duration-200 p-5">
                 <div className="py-4 sm:p-5">
-                    <div className="flex gap-4 sm:gap-6">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                         {/* product image */}
                         <Link
                         href={''}
                         className="relative shrink-0 group">
-                            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-linear-to-br from-gray-50 via-white to-gray-100p-3 border border-gray-100 overflow-hidden ">
+                            <div className="w-full sm:w-28 h-48 sm:h-28 sm:h-32 rounded-xl bg-linear-to-br from-gray-50 via-white to-gray-100p-3 border border-gray-100 overflow-hidden ">
                                 <img src={imageCover} alt={title} 
-                                className="w-full h-full object-contain transition-transform group-hover:scale-110 duration-300"/>
+                                className="w-full h-full object-contain sm:object-contain object-cover transition-transform group-hover:scale-110 duration-300"/>
                             </div>
                             {/* in stock badge */}
                             <div className="absolute -bottom-1 -right-1 bg-green-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded">
@@ -98,7 +97,7 @@ export default function CartItem({info}: {info:CartProduct}) {
                                 <Link
                                 href={''}
                                 className="group/title">
-                                    <h3 className="font-semibold text-gray-900 group-hover/title:text-green-500 transition-colors duration-200 leading-relaxed text-base sm:text-lg">
+                                    <h3 className="font-semibold text-gray-900 group-hover/title:text-green-500 transition-colors duration-200 leading-relaxed text-base sm:text-lg line-clamp-2">
                                         {title}
                                     </h3>
                                 </Link>
@@ -118,7 +117,7 @@ export default function CartItem({info}: {info:CartProduct}) {
                                 </div>
                             </div>
                             {/* Quantity controls action */}
-                            <div className="mt-auto flex flex-wrap items-center justify-between gap-4">
+                            <div className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                 <div className="flex items-center">
                                     <div className="flex items-center bg-gray-50 p-1 rounded-xl border border-gray-200">
                                         <button
@@ -138,7 +137,7 @@ export default function CartItem({info}: {info:CartProduct}) {
                                     </div>
                                 </div>
                                 {/* line total */}
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center justify-between sm:justify-start gap-4 w-full sm:w-auto">
                                     <div className="text-right">
                                         <p className="text-xs text-gray-400 mb-0.5">Total</p>
                                         <p className="text-xl font-bold text-gray-900">

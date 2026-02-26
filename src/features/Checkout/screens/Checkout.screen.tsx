@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 import { clearCart } from "@/features/cart/store/Cart.slice";
 import { AddressData } from "@/features/Profile/types/address.type";
 import { getAllUserAddresses } from "@/features/Profile/server/address.action";
-import AddressCard from "@/features/Profile/component/AddressCard";
+import CheckoutAddressCard from "@/features/Profile/component/CheckoutAddressCard";
+import CheckoutScreenSkeleton from "./CheckoutScreenSkeleton";
 
 export default function CheckoutScreen() {
     const dispatch = useDispatch()
@@ -64,16 +65,52 @@ export default function CheckoutScreen() {
         
     })
 
+    const submitWithSelectedAddress = async () => {
+    try {
+        if (!cartId || !selectedAddress) return;
+
+        const shippingAddress = {
+        city: selectedAddress.city,
+        details: selectedAddress.details,
+        phone: selectedAddress.phone,
+        };
+
+        if (paymentMethod === "cash") {
+        const response = await createOrderCash({ cartId, shippingAddress });
+
+        if (response.status === "success") {
+            dispatch(clearCart());
+            toast.success("Order created successfully");
+            router.push("/orders");
+        }
+        } else {
+        const response = await createOnlineOrder({
+            cartId,
+            shippingAddress,
+            url: location.origin,
+        });
+
+        if (response.status === "success") {
+            dispatch(clearCart());
+            location.href = response.session.url;
+        }
+        }
+    } catch (error) {
+        console.error(error);
+        toast.error("Failed to create order");
+    }
+    };
+
     const onSubmit: SubmitHandler<shippingAddressValues> = async (values) => {
     try {
         if (!cartId) return;
 
     const shippingAddress = selectedAddress
         ? {
-            city: selectedAddress.city,
-            details: selectedAddress.details,
-            phone: selectedAddress.phone,
-            }
+            city: selectedAddress.city || "",
+            details: selectedAddress.details || "",
+            phone: selectedAddress.phone || "",
+        }
         : values;
 
         if (paymentMethod === "cash") {
@@ -104,6 +141,10 @@ export default function CheckoutScreen() {
         toast.error("Failed to create order");
     }
     };
+
+    if (loadingAddresses) {
+        return <CheckoutScreenSkeleton />
+    }
 
 
     return (
@@ -149,52 +190,46 @@ export default function CheckoutScreen() {
                             </Link>
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={useNewAddress? handleSubmit(onSubmit): (e) => {e.preventDefault(); 
+                    submitWithSelectedAddress(); 
+                            }
+                    }>
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             {/* Left Column Form */}
                             <div className="lg:col-span-2 space-y-6">
                             {loadingAddresses ? (
-                                <p>Loading addresses...</p>
+                            <p>Loading addresses...</p>
                             ) : (!useNewAddress && addresses.length > 0) ? (
-                                <>
+                            <>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                    {addresses.map((address) => (
-                                    <div
-                                        key={address._id}
-                                        className={`p-4 border rounded-xl cursor-pointer ${
-                                        selectedAddress?._id === address._id
-                                            ? "border-green-600 bg-green-50"
-                                            : "border-gray-200"
-                                        }`}
-                                        onClick={() => setSelectedAddress(address)}
-                                    >
-                                        <AddressCard
-                                        address={address}
-                                        onDelete={() => fetchAddresses()}
-                                        onEdit={() => {}}
-                                        />
-                                    </div>
-                                    ))}
+                                {addresses.map((address) => (
+                                    <CheckoutAddressCard
+                                    key={address._id}
+                                    address={address}
+                                    isSelected={selectedAddress?._id === address._id}
+                                    onSelect={() => setSelectedAddress(address)}
+                                    />
+                                ))}
                                 </div>
 
-                                {/* Use New Address Button */}
                                 <button
-                                    type="button"
-                                    className="mt-6 inline-flex items-center gap-2 text-green-600 font-semibold"
-                                    onClick={() => {
+                                type="button"
+                                className="mt-2 inline-flex items-center gap-3 rounded-full px-6 py-3 font-semibold
+                                            text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500
+                                            shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out
+                                            focus:outline-none focus:ring-4 focus:ring-green-300"
+                                onClick={() => {
                                     setUseNewAddress(true);
                                     setSelectedAddress(null);
-                                    }}
+                                }}
                                 >
-                                    <FontAwesomeIcon icon={faPlus} />
-                                    Use New Address
+                                <FontAwesomeIcon icon={faPlus} className="text-green-600" />
+                                Use New Address
                                 </button>
-                                </>
+                            </>
                             ) : (
-                                // Show Shipping Form when no addresses or user wants to add new address
-                                <ShippingForm register={register} errors={errors} />
+                            <ShippingForm register={register} errors={errors} />
                             )}
-
                             <PaymentMethods selectedMethod={paymentMethod} changeMethod={setPaymentMethod} />
                             </div>
                             {/* Right Column Order Summary */}
@@ -250,9 +285,13 @@ export default function CheckoutScreen() {
                                             </div>
                                         </div>
                                         {/* Submit button */}
-                                        <button className="w-full mt-6 bg-linear-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 active:scale-[0.98]">
-                                                <FontAwesomeIcon icon={faShieldAlt}/>
-                                                Proceed to Payment
+                                        <button
+                                            type="submit"
+                                            disabled={(!useNewAddress && !selectedAddress) || false}
+                                            className="w-full mt-6 bg-linear-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 active:scale-[0.98]"
+                                            >
+                                            <FontAwesomeIcon icon={faShieldAlt}/>
+                                            Proceed to Payment
                                         </button>
                                         {/* Trust Badges */}
                                         <div className="flex items-center justify-center gap-4 mt-4 py-3 border-t border-gray-100">

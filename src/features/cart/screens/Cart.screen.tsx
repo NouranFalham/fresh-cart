@@ -9,11 +9,38 @@ import CartSummary from "../components/CartSummary";
 import { clearAllProductsFromCart } from "../server/cart.action";
 import { clearCart, setCartInfo } from "../store/Cart.slice";
 import { toast } from "react-toastify";
+import EmptyCart from "../components/emptyCard";
+import { useEffect, useState } from "react";
+import CartItemSkeleton from "../components/CartItemSkeleton";
 
 export default function CartScreen() {
     const dispatch = useDispatch()
 
     const {numOfCartItems, products,totalCartPrice} = useSelector((state:AppState)=> state.cart)
+
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        if (products) {
+            setLoading(false)
+        }
+    }, [products])
+
+    if (loading) {
+        return (
+            <div className="bg-gray-50 min-h-screen py-8">
+                <div className="container mx-auto px-4 space-y-4">
+                    {[...Array(3)].map((_, i) => (
+                        <CartItemSkeleton key={i} />
+                    ))}
+                </div>
+            </div>
+        )
+    }
+
+if (!products || products.length === 0) {
+    return <EmptyCart />
+}
 
     const deleteAll = async ()=>{
         try {

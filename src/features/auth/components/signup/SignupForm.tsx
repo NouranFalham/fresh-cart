@@ -60,23 +60,18 @@ export default function SignupForm() {
     const password = watch("password", "");
 
     const getPasswordStrength = (password: string) => {
-    let score = 0;
+    if (!password) return { label: "", width: "0%", color: "" }; // <-- empty input
 
-    if (password.length >= 8) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
 
-    if (score <= 1)
-        return { label: "weak", width: "25%", color: "bg-red-500" };
-
-    if (score === 2)
-        return { label: "medium", width: "50%", color: "bg-yellow-500" };
-
-    if (score === 3)
-        return { label: "good", width: "75%", color: "bg-blue-500" };
-
-    return { label: "strong", width: "100%", color: "bg-green-600" };
+        if (score <= 1) return { label: "weak", width: "25%", color: "bg-red-500" };
+        if (score === 2) return { label: "medium", width: "50%", color: "bg-yellow-500" };
+        if (score === 3) return { label: "good", width: "75%", color: "bg-blue-500" };
+        return { label: "strong", width: "100%", color: "bg-green-600" };
     };
 
     const strength = getPasswordStrength(password);
@@ -154,7 +149,7 @@ export default function SignupForm() {
                         style={{ width: strength.width }}
                     />
                     </div>
-                    <span className="text-sm capitalize">{strength.label}</span>
+                    {strength.label && <span className="text-sm capitalize">{strength.label}</span>}
                 </div>
                 
 
@@ -232,16 +227,3 @@ export default function SignupForm() {
     );
 }
 
-// _________RESPONSE________
-
-// {success: true, message: 'Account created successfully', data: {…}}
-// data: {message: 'success', user: {name: 'Nouran Mohamed', email: 'nouranfalham00@gmail.com', role: 'user'}, token
-// message: "Account created successfully
-// success: true"
-
-
-// Response
-// {success:  false, message: 'Validation errors', errors: {…}}
-// errors: {phone: 'Only Egyptian phone numbers are allowed', terms: 'You must accept the terms and conditions'}
-// message: "Validation errors"
-// success: false"

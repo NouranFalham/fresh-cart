@@ -22,8 +22,8 @@
     category: Category;
     brand: Brand;
     ratingsAverage: number;
-    createdAt: string;   // ISO date string
-    updatedAt: string;   // ISO date string
+    createdAt: string;   
+    updatedAt: string;   
     __v: number;
     }
 

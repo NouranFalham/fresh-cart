@@ -11,8 +11,8 @@ export interface CartResponse {
     _id: string;
     cartOwner: string;
     products: CartProduct[];
-    createdAt: string; // ISO string
-    updatedAt: string; // ISO string
+    createdAt: string; 
+    updatedAt: string; 
     __v: number;
     totalCartPrice: number;
     }
@@ -43,7 +43,7 @@ export interface CartResponse {
     _id: string;
     name: string;
     slug: string;
-    image?: string; // Optional because subcategory only has category ID
+    image?: string; 
     }
 
     // Subcategory of the product

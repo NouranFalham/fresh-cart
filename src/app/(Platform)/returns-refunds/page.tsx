@@ -1,11 +1,10 @@
-
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileContract, faGavel, faUserShield, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUndoAlt, faReceipt, faClock, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
-export default function TermsOfService() {
+export default function ReturnsRefundsPolicy() {
     const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
@@ -27,69 +26,69 @@ export default function TermsOfService() {
             {/* Header */}
             <header className="mb-8 flex items-center space-x-4">
             <div className="bg-green-600 p-3 rounded-full text-white shadow-lg animate-pulse">
-                <FontAwesomeIcon icon={faGavel} className="text-3xl" />
+                <FontAwesomeIcon icon={faUndoAlt} className="text-3xl" />
             </div>
             <h1 className="text-3xl font-extrabold text-green-700 hover:text-green-600 transition-colors duration-500">
-                Terms of Service
+                Returns & Refunds Policy
             </h1>
             </header>
 
             {/* Introduction */}
             <p className="text-gray-700 mb-6 leading-relaxed text-lg">
-            Welcome to Fresh Cart! By using our services, you agree to comply with these Terms of Service. Please read them carefully.
+            At Fresh Cart, your satisfaction is our priority. If you're not completely satisfied with your purchase, our Returns & Refunds Policy ensures a smooth and fair process.
             </p>
 
             {/* Sections */}
             <section className="space-y-8">
-            {/* Account Responsibilities */}
+            {/* Return Window */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""}`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faUserShield} className="text-green-600" />
-                Account Responsibilities
+                <FontAwesomeIcon icon={faClock} className="text-green-600" />
+                Return Window
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                Users are responsible for maintaining the confidentiality of their accounts and passwords. Any activity under your account is your responsibility.
+                You can return eligible items within 14 days from the delivery date. Items must be unused, in original packaging, and with all tags intact.
                 </p>
             </div>
 
-            {/* Prohibited Actions */}
+            {/* Refund Process */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""} delay-100`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faFileContract} className="text-green-600" />
-                Prohibited Actions
+                <FontAwesomeIcon icon={faReceipt} className="text-green-600" />
+                Refund Process
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                You may not use our services for unlawful purposes, attempt to hack or disrupt our platform, or infringe the rights of others.
+                Once your return is received and inspected, your refund will be processed within 5-7 business days. Refunds will be issued to the original payment method.
                 </p>
             </div>
 
-            {/* Purchases and Payments */}
+            {/* Non-Returnable Items */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""} delay-200`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-green-600" />
-                Purchases and Payments
+                <FontAwesomeIcon icon={faExclamationTriangle} className="text-green-600" />
+                Non-Returnable Items
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                All purchases made through Fresh Cart are subject to our payment processing policies. We ensure secure transactions but are not liable for payment failures due to third-party services.
+                Some items are non-returnable for hygiene or safety reasons, including perishable goods, intimate apparel, and personalized products.
                 </p>
             </div>
 
-            {/* Modifications to Terms */}
+            {/* How to Initiate */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""} delay-300`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faGavel} className="text-green-600" />
-                Modifications to Terms
+                <FontAwesomeIcon icon={faUndoAlt} className="text-green-600" />
+                How to Initiate a Return
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                Fresh Cart reserves the right to modify these Terms at any time. Changes will be communicated through our platform and take effect immediately upon posting.
+                To start a return, contact our support team with your order number. We will guide you through the process and provide a prepaid shipping label if eligible.
                 </p>
             </div>
             </section>

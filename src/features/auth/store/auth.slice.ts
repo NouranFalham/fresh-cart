@@ -30,14 +30,3 @@ const authSlice = createSlice({
 
 export const authReducer = authSlice.reducer
 export const {setAuthInfo}= authSlice.actions
-
-// user info
-// {
-//     "message": "success",
-//     "user": {
-//         "name": "Ahmed",
-//         "email": "ahmed.route.2@gmail.com",
-//         "role": "user"
-//     },
-//     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2I1ZjI5ODAzZTg4OGUwNTJhZDIxMCIsIm5hbWUiOiJBaG1lZCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzcwNjAyNDc4LCJleHAiOjE3NzgzNzg0Nzh9.hSv1R75KLtIhJ8q553lsz8GoDTVh2eYP23dZVePiJuM"
-// }

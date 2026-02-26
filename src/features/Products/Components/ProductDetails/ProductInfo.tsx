@@ -216,14 +216,14 @@ export default function ProductInfo({product}:{product:Product}) {
 
                             {isInCart ? "Added to Cart ✓" : "Add to Cart"}
                             </button>
-                            <button
-                            id="buy-now"
-                            className="flex-1 bg-gray-900 text-white py-3.5 px-6 rounded-xl font-medium hover:bg-gray-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                            <Link href={"/shop"}
+                            className={`flex-1 bg-gray-900 text-white py-3.5 px-6 rounded-xl font-medium hover:bg-gray-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2`}>
                                 <>
                                     <FontAwesomeIcon icon={faBolt}/>
                                     Buy Now
                                 </>
-                            </button>
+                            </Link>
+                            
                         </div>
                         {/* Wishlist */}
                         <div className="flex gap-3 mb-6">

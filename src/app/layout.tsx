@@ -31,12 +31,13 @@ import { preloadedState } from '../store/store';
 import { getLoggedUserCart } from "@/features/cart/server/cart.action";
 import { CartState, setCartInfo } from "@/features/cart/store/Cart.slice";
 import { getLoggedUserWishlist } from "@/features/wishlist/server/Wishlist.action";
-import { WishlistState } from "@/features/wishlist/store/Wishlist.slice";
+import { setWishlistInfo, WishlistState } from "@/features/wishlist/store/Wishlist.slice";
 const exo = Exo({
   variable: "--font-exo",
   subsets: ["latin"],
   weight: ["400","500", "600", "700", "800", "900"],
 });
+
 
 export default async function RootLayout({
   children,

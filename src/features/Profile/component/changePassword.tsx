@@ -47,7 +47,7 @@ export default function ChangePassword() {
     return (
         <section className="relative rounded-3xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 shadow-2xl p-10 overflow-hidden">
         
-        {/* Soft Background Glow */}
+        {/*  Background  */}
         <div className="absolute -top-24 -right-24 w-72 h-72 bg-emerald-200/30 blur-3xl rounded-full pointer-events-none"></div>
 
         <div className="relative">

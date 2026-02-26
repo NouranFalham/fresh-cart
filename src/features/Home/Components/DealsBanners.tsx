@@ -1,6 +1,6 @@
 "use client";
 
-import { faArrowRight, faBolt, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faBolt, faClock, faFire, faHourglassHalf, faTruck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
@@ -32,24 +32,24 @@ export default function DealsBanners() {
                                 Get Up To 40% Off On Selected Organic Fruits
                             </p>
 
-                            <div className="flex gap-3 mb-6">
-                                {[
-                                    {value: "12" , label: "Hours"},
-                                    {value: "45" , label: "Mins"},
-                                    {value: "30" , label: "Sec"},
-                                ].map((item, index)=>(
-                                    <div
-                                        key={index}
-                                        className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-2 text-center transition duration-300 hover:scale-110 hover:bg-white/30 animate-pulse"
-                                    >
-                                        <div className="text-xl font-bold">{item.value}</div>
-                                        <div className="text-xs text-white/70">{item.label}</div>
-                                    </div>
-                                ))}
+                            <div className="flex flex-wrap gap-3 mb-6 justify-center">
+                            {[
+                                { icon: faFire, text: "Best Seller" },
+                                { icon: faHourglassHalf, text: "Limited Stock" },
+                                { icon: faTruck, text: "Free Shipping" },
+                            ].map((item, index) => (
+                                <div
+                                key={index}
+                                className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm sm:text-base font-semibold text-white shadow-md hover:scale-105 transition-transform duration-300"
+                                >
+                                <FontAwesomeIcon icon={item.icon} className="text-lg" />
+                                <span>{item.text}</span>
+                                </div>
+                            ))}
                             </div>
 
                             <Link
-                                href={'/deals'}
+                                href={'/shop'}
                                 className="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-gray-100 hover:gap-4 hover:shadow-lg"
                             >
                                 Shop Now
@@ -88,7 +88,7 @@ export default function DealsBanners() {
                             </div>
 
                             <Link
-                                href={'/products?sort=newest'}
+                                href={'/shop'}
                                 className="inline-flex items-center gap-2 bg-white text-orange-600 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-gray-100 hover:gap-4 hover:shadow-lg"
                             >
                                 Shop Now

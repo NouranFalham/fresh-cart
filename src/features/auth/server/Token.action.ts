@@ -72,14 +72,3 @@ export async function verifyToken(): Promise<AuthState>{
     }
 }
 
-// verify token response 
-// {
-//     "message": "verified",
-//     "decoded": {
-//         "id": "673b5f29803e888e052ad210",
-//         "name": "Ahmed",
-//         "role": "user",
-//         "iat": 1770602478,
-//         "exp": 1778378478
-//     }
-// }

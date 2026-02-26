@@ -1,16 +1,17 @@
 "use client"
-import { faEye, faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faHeart as faHeartRegular   } from "@fortawesome/free-regular-svg-icons";
+import { faCheck, faPlus , faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { Product } from "../Types/Products.types";
 import Ratings from "@/components/ui/Ratings";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import { addProductToWishlist, getLoggedUserWishlist } from "@/features/wishlist/server/Wishlist.action";
-import { setWishlistInfo } from "@/features/wishlist/store/Wishlist.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { addProductToWishlist, getLoggedUserWishlist, removeProductFromWishlist } from "@/features/wishlist/server/Wishlist.action";
+import { removeWishlistItem, setWishlistInfo } from "@/features/wishlist/store/Wishlist.slice";
 import { useAddToCart } from "@/features/cart/hooks/useAddToCart";
+import { AppState } from "@/store/store";
 
 
 export default function ProductCard({info}: {info:Product}) {
@@ -18,16 +19,27 @@ export default function ProductCard({info}: {info:Product}) {
     const dispatch = useDispatch()
     const { addToCart, isLoading } = useAddToCart();
     const [isAdded, setIsAdded] = useState(false);
-    
-
 
     const {id, imageCover,price, priceAfterDiscount, ratingsAverage , title, category, ratingsQuantity} = info
     const onSale = priceAfterDiscount ? price > priceAfterDiscount : false
     const discountPercentage = priceAfterDiscount? Math.round((price - priceAfterDiscount)/price * 100) : null
 
-    const handleAddToCart = async () => {
-    if (isAdded) return;
+    const wishlistItems = useSelector((state: AppState) => state.wishlist.data);
+    const isInWishlist = wishlistItems.some(item => item.id === id);
 
+        useEffect(() => {
+        const cart = JSON.parse(localStorage.getItem("myCart") || "[]");
+        if (cart.includes(id)) {
+        setIsAdded(true);
+        }
+    }, [id]);
+
+    const handleAddToCart = async () => {
+    const cart = JSON.parse(localStorage.getItem("myCart") || "[]");
+        if (!cart.includes(id)) {
+            cart.push(id);
+            localStorage.setItem("myCart", JSON.stringify(cart));
+        }
     const success = await addToCart(id);
 
     if (success) {
@@ -35,18 +47,24 @@ export default function ProductCard({info}: {info:Product}) {
     }
     };
 
-    const handleAddToWishlist  = async ()=> {
+    const handleToggleWishlist = async () => {
         try {
-            const response = await addProductToWishlist({productId:id})
-            // console.log(response);
-            if(response.status === 'success'){
-            toast.success (response.message)}
-            const wishlistInfo =await getLoggedUserWishlist()
-            dispatch(setWishlistInfo(wishlistInfo))
+            if (isInWishlist) {
+            await removeProductFromWishlist({ productId: id });
+            dispatch(removeWishlistItem({ id }));
+            toast.success("Removed from wishlist");
+            } else {
+            const response = await addProductToWishlist({ productId: id });
+            if (response.status === "success") {
+                toast.success(response.message);
+                const wishlistInfo = await getLoggedUserWishlist();
+                dispatch(setWishlistInfo(wishlistInfo));
+            }
+            }
         } catch (error) {
-            toast.error("Failed to add to wishlist");
-        } 
-    }
+            toast.error("Wishlist action failed");
+        }
+        };
     return (
         <>
             <div 
@@ -63,9 +81,19 @@ export default function ProductCard({info}: {info:Product}) {
                             </span>}
                         </div>
                         <div className="absolute top-3 right-3 flex flex-col space-y-2">
-                            <button className="bg-white h-8 w-8 rounded-full flex items-center justify-center transition shadow-sm text-gray-600 hover:text-green-500"
-                            onClick={handleAddToWishlist}>
-                                <FontAwesomeIcon icon={faHeart}/>
+                            <button
+                            onClick={handleToggleWishlist}
+                            className={`h-9 w-9 rounded-full flex items-center justify-center transition-all duration-300 shadow-md
+                            ${isInWishlist 
+                                ? "bg-red-50 hover:bg-red-100" 
+                                : "bg-white hover:bg-gray-100"}`}
+                            >
+                            <FontAwesomeIcon
+                                icon={isInWishlist ? faHeartSolid : faHeartRegular}
+                                className={`text-lg ${
+                                isInWishlist ? "text-red-500" : "text-gray-500"
+                                }`}
+                            />
                             </button>
 
                             <Link
@@ -98,20 +126,13 @@ export default function ProductCard({info}: {info:Product}) {
                             }
                             </div>
                             <button
-                                onClick={handleAddToCart}
-                                disabled={isLoading || isAdded}
-                                className={`h-10 w-10 rounded-full flex items-center justify-center text-white transition duration-200
-                                    ${
-                                        isLoading || isAdded
-                                            ? "bg-green-500/50 cursor-not-allowed"
-                                            : "bg-green-500 hover:bg-green-600"
-                                    }`}
+                            onClick={handleAddToCart}
+                            disabled={isAdded}
+                            className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition-colors duration-200
+                                ${isAdded ? "bg-green-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}
+                            title={isAdded ? "Added to cart" : "Add to cart"}
                             >
-                                {isLoading ? (
-                                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                                ) : (
-                                    <FontAwesomeIcon icon={faPlus} />
-                                )}
+                            <FontAwesomeIcon icon={isAdded ? faCheck : faPlus} />
                             </button>
                         </div>
                     </div>

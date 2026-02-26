@@ -10,7 +10,7 @@ interface Props {
                 hover:-translate-y-2 
                 overflow-hidden cursor-pointer p-8">
 
-    {/* Subtle Hover Gradient Background */}
+    {/*Background */}
     <div className="absolute inset-0 bg-gradient-to-br 
                     from-green-50 via-transparent to-emerald-50 
                     opacity-0 group-hover:opacity-100 

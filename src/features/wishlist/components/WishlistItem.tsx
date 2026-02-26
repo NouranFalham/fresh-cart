@@ -9,12 +9,31 @@ import { useDispatch } from "react-redux";
 import { removeProductFromWishlist } from "../server/Wishlist.action";
 import { removeWishlistItem} from "../store/Wishlist.slice";
 import { useAddToCart } from "@/features/cart/hooks/useAddToCart";
+import { useEffect, useState } from "react";
 
 export default function WishlistItem({itemInfo}:{itemInfo:Product}) {
     const dispatch = useDispatch()
     const { addToCart} = useAddToCart();
+    const [added, setAdded] = useState(false);
 
     const {title , imageCover, quantity, price , priceAfterDiscount, category , id} = itemInfo
+
+    useEffect(() => {
+        const cart = JSON.parse(localStorage.getItem("myCart") || "[]");
+        if (cart.includes(id)) {
+        setAdded(true);
+        }
+    }, [id]);
+
+    const handleAddToCart = () => {
+        addToCart(id);
+        setAdded(true);
+        const cart = JSON.parse(localStorage.getItem("myCart") || "[]");
+        if (!cart.includes(id)) {
+        cart.push(id);
+        localStorage.setItem("myCart", JSON.stringify(cart));
+        }
+    };
 
     const handleRemove = async ()=>{
             const result = await Swal.fire({
@@ -48,6 +67,9 @@ export default function WishlistItem({itemInfo}:{itemInfo:Product}) {
                     // console.log(response)
                     dispatch(removeWishlistItem({id}))
                     toast.success('Item removed successfully')
+                    const cart = JSON.parse(localStorage.getItem("myCart") || "[]");
+                    const updatedCart = cart.filter((item: string | number) => item !== id);
+                    localStorage.setItem("myCart", JSON.stringify(updatedCart));
                 } catch (error) {
                     toast.error('Something went wrong')
                 }
@@ -110,10 +132,17 @@ export default function WishlistItem({itemInfo}:{itemInfo:Product}) {
 
                 <div className="flex items-center gap-3">
 
-                    <button className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition duration-200"
-                    onClick={()=> addToCart(id)}>
+                    <button
+                        className={`px-5 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition duration-200 ${
+                        added
+                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            : "bg-green-500 text-white hover:bg-green-600"
+                        }`}
+                        onClick={handleAddToCart}
+                        disabled={added}
+                    >
                         <FontAwesomeIcon icon={faCartShopping} />
-                        Add to Cart
+                        {added ? "Added" : "Add to Cart"}
                     </button>
 
                     <button className="h-10 w-10 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-500 hover:border-red-300 transition duration-200 flex items-center justify-center"

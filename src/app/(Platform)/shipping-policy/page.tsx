@@ -1,11 +1,10 @@
-
 "use client";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileContract, faGavel, faUserShield, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faTruck, faBoxesPacking, faClock, faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 
-export default function TermsOfService() {
+export default function ShippingPolicy() {
     const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
@@ -27,69 +26,69 @@ export default function TermsOfService() {
             {/* Header */}
             <header className="mb-8 flex items-center space-x-4">
             <div className="bg-green-600 p-3 rounded-full text-white shadow-lg animate-pulse">
-                <FontAwesomeIcon icon={faGavel} className="text-3xl" />
+                <FontAwesomeIcon icon={faTruck} className="text-3xl" />
             </div>
             <h1 className="text-3xl font-extrabold text-green-700 hover:text-green-600 transition-colors duration-500">
-                Terms of Service
+                Shipping Policy
             </h1>
             </header>
 
             {/* Introduction */}
             <p className="text-gray-700 mb-6 leading-relaxed text-lg">
-            Welcome to Fresh Cart! By using our services, you agree to comply with these Terms of Service. Please read them carefully.
+            At Fresh Cart, we ensure your products are delivered safely and promptly. Please review our shipping policy carefully to understand our delivery process.
             </p>
 
             {/* Sections */}
             <section className="space-y-8">
-            {/* Account Responsibilities */}
+            {/* Processing Time */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""}`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faUserShield} className="text-green-600" />
-                Account Responsibilities
+                <FontAwesomeIcon icon={faClock} className="text-green-600" />
+                Order Processing Time
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                Users are responsible for maintaining the confidentiality of their accounts and passwords. Any activity under your account is your responsibility.
+                Orders are processed within 1-3 business days. You will receive a confirmation email once your order has been shipped.
                 </p>
             </div>
 
-            {/* Prohibited Actions */}
+            {/* Shipping Methods */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""} delay-100`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faFileContract} className="text-green-600" />
-                Prohibited Actions
+                <FontAwesomeIcon icon={faBoxesPacking} className="text-green-600" />
+                Shipping Methods
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                You may not use our services for unlawful purposes, attempt to hack or disrupt our platform, or infringe the rights of others.
+                We offer standard and express shipping options. Shipping fees and delivery times vary depending on your location and the shipping method chosen.
                 </p>
             </div>
 
-            {/* Purchases and Payments */}
+            {/* Tracking */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""} delay-200`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-green-600" />
-                Purchases and Payments
+                <FontAwesomeIcon icon={faMapMarkedAlt} className="text-green-600" />
+                Tracking Your Order
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                All purchases made through Fresh Cart are subject to our payment processing policies. We ensure secure transactions but are not liable for payment failures due to third-party services.
+                Once your order is shipped, you will receive a tracking number via email. You can track your package until it reaches your doorstep.
                 </p>
             </div>
 
-            {/* Modifications to Terms */}
+            {/* Delivery Areas */}
             <div
                 className={`${sectionClass} ${animate ? sectionClassActive : ""} delay-300`}
             >
                 <h2 className="text-xl font-semibold text-green-700 flex items-center gap-3 mb-3 hover:text-green-600 transition-colors duration-500">
-                <FontAwesomeIcon icon={faGavel} className="text-green-600" />
-                Modifications to Terms
+                <FontAwesomeIcon icon={faTruck} className="text-green-600" />
+                Delivery Areas
                 </h2>
                 <p className="text-gray-700 leading-relaxed">
-                Fresh Cart reserves the right to modify these Terms at any time. Changes will be communicated through our platform and take effect immediately upon posting.
+                We currently ship to all major cities in Egypt. For rural or remote areas, delivery times may vary. Contact our support team for more information.
                 </p>
             </div>
             </section>
