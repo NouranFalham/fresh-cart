@@ -13,7 +13,7 @@ export default function NotFoundPage() {
     }, []);
 
     return (
-        <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-50 to-white px-6 py-12 relative overflow-hidden">
+        <main className="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-green-50 to-white px-6 py-12 relative overflow-hidden">
         
         {/* Animated Cart Icon */}
         <div

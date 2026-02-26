@@ -12,7 +12,7 @@ export default function ForgetPasswordHero() {
     return (
         <section
         className={`relative flex flex-col justify-center items-center
-            bg-gradient-to-br from-green-700 via-green-500 to-green-400
+            bg-linear-to-br from-green-700 via-green-500 to-green-400
             rounded-l-3xl p-16   text-white overflow-hidden`}
         >
         <div className="absolute -top-24 -left-24 w-56 h-56 bg-green-300 rounded-full opacity-30 animate-floatSlow"></div>

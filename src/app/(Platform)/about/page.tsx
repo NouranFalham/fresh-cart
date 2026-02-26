@@ -6,13 +6,13 @@ import { faLeaf, faTruckFast, faShieldHalved, faHeadset } from "@fortawesome/fre
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white via-green-50 to-white text-gray-800">
+        <div className="min-h-screen bg-linear-to-b from-white via-green-50 to-white text-gray-800">
 
         {/* ================= HERO SECTION ================= */}
         <section className="relative overflow-hidden py-24 px-6 text-center">
             <div className="max-w-4xl mx-auto">
 
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-600 to-emerald-400 bg-clip-text text-transparent animate-fade-in">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-linear-to-r from-green-600 to-emerald-400 bg-clip-text text-transparent animate-fade-in">
                 About Our Store
             </h1>
 
@@ -86,7 +86,7 @@ export default function AboutPage() {
             </div>
 
             <div className="relative">
-                <div className="bg-gradient-to-tr from-green-400 to-emerald-300 rounded-3xl p-1 shadow-xl hover:scale-105 transition-transform duration-300">
+                <div className="bg-linear-to-tr from-green-400 to-emerald-300 rounded-3xl p-1 shadow-xl hover:scale-105 transition-transform duration-300">
                 <div className="bg-white rounded-3xl p-10 text-center">
                     <h3 className="text-4xl font-bold text-green-500">10K+</h3>
                     <p className="text-gray-600 mt-2">Happy Customers</p>
@@ -99,7 +99,7 @@ export default function AboutPage() {
 
 
         {/* ================= CTA SECTION ================= */}
-        <section className="py-20 px-6 text-center bg-gradient-to-r from-green-500 to-emerald-400 text-white">
+        <section className="py-20 px-6 text-center bg-linear-to-r from-green-500 to-emerald-400 text-white">
 
             <h2 className="text-4xl font-bold mb-6">
             Ready to Start Shopping?

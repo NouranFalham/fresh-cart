@@ -17,7 +17,7 @@ export default function ReturnsRefundsPolicy() {
         "opacity-100 translate-y-0 transition-all duration-700 ease-out";
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-green-50 to-white px-6 py-12">
+        <main className="min-h-screen bg-linear-to-b from-green-50 to-white px-6 py-12">
         <section
             className={`max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 transition-all duration-700 ${
             animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"

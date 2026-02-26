@@ -50,14 +50,14 @@ interface FormState {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 py-20 px-6">
+        <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-emerald-50 py-20 px-6">
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
 
             {/* ================= LEFT SIDE ================= */}
             <div>
 
-            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-green-600 to-emerald-400 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold mb-6 bg-linear-to-r from-green-600 to-emerald-400 bg-clip-text text-transparent">
                 Let’s Talk.
             </h1>
 
@@ -99,7 +99,7 @@ interface FormState {
             {/* ================= FORM CARD ================= */}
             <div className="relative">
 
-            <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-400 rounded-3xl blur opacity-20"></div>
+            <div className="absolute -inset-1 bg-linear-to-r from-green-400 to-emerald-400 rounded-3xl blur opacity-20"></div>
 
             <div className="relative bg-white rounded-3xl p-10 shadow-xl border border-green-100">
 

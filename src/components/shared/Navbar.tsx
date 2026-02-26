@@ -103,7 +103,7 @@ useEffect(() => {
             <nav
                 className={`w-full flex justify-between items-center px-8 py-4  ${
                     isNavFixed
-                    ? "fixed top-0 left-0  z-[1000] bg-white/95 backdrop-blur-md shadow-md translate-y-0 transition-all duration-400 ease-in-out transform"
+                    ? "fixed top-0 left-0  z-1000 bg-white/95 backdrop-blur-md shadow-md translate-y-0 transition-all duration-400 ease-in-out transform"
                     : "relative bg-white  "
             }`}
             >
@@ -120,7 +120,7 @@ useEffect(() => {
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Search for products..."
-                className="min-w-[380px] px-5 py-3 rounded-full bg-white border border-gray-300 shadow-sm
+                className="min-w-95 px-5 py-3 rounded-full bg-white border border-gray-300 shadow-sm
                         text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400
                         focus:border-green-500 transition-all duration-300 hover:shadow-md"
             />
@@ -166,7 +166,7 @@ useEffect(() => {
                     </button>
 
                     {isAccountOpen && (
-                        <div className="absolute right-0 mt-3 w-56 bg-white shadow-lg rounded-xl p-3 z-[1200]">
+                        <div className="absolute right-0 mt-3 w-56 bg-white shadow-lg rounded-xl p-3 z-1200">
                         <ul className="space-y-2 text-sm">
                             <li>
                             <Link href="/profile" className="flex items-center gap-2 p-2 rounded-lg hover:bg-green-100 hover:text-green-500 transition-colors duration-200">

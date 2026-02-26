@@ -33,7 +33,7 @@ export default function BrandsScreen() {
         <div className="min-h-screen bg-[#f8f9fc]">
 
         {/* HERO */}
-        <div className="relative bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-500 py-24">
+        <div className="relative bg-linear-to-r from-purple-600 via-indigo-600 to-blue-500 py-24">
             <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
 
             <div className="relative max-w-7xl mx-auto px-6">
@@ -79,7 +79,7 @@ export default function BrandsScreen() {
         {/* FLOATING BRAND SECTION */}
         <div className="relative -mt-16 pb-24">
             <div className="max-w-7xl mx-auto px-6">
-            <div className="bg-white rounded-[2rem] p-10 
+            <div className="bg-white rounded-4xl p-10 
                             shadow-[0_30px_80px_rgba(0,0,0,0.08)]">
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">

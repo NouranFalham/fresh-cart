@@ -19,7 +19,7 @@ import {
     return (
         <div className="min-h-screen bg-gray-50">
         {/* HEADER SECTION - Same original design but adjusted padding */}
-        <div className="relative bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+        <div className="relative bg-linear-to-r from-green-500 to-emerald-500 text-white">
             <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
 
             <div className="relative max-w-6xl mx-auto px-6 py-10 md:py-16">
