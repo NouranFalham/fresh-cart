@@ -57,8 +57,7 @@ export default function ForgetPasswordHero() {
             {[faEnvelope, faShieldAlt, faLock].map((icon, i) => (
             <div
                 key={i}
-                className="bg-green-600 p-4 rounded-full shadow-lg text-white cursor-default
-                animate-bounceSlow"
+                className={`bg-green-600 p-4 rounded-full shadow-lg text-white cursor-default animate-bounceSlow`}
                 style={{ animationDelay: `${i * 0.3}s` }}
             >
                 <FontAwesomeIcon icon={icon} className="w-6 h-6" />
