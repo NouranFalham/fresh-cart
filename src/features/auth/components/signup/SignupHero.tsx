@@ -1,76 +1,83 @@
-'use client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldHalved, faStar, faTruckFast } from '@fortawesome/free-solid-svg-icons';
-import Image from 'next/image';
-import reviewAuthorImg from '@/assets/images/review-author.png';
+"use client"
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+    faUserPlus, 
+    faLeaf, 
+    faTruck, 
+    faShieldHeart 
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function SignupHero() {
+    const [animate, setAnimate] = useState(false);
+
+    useEffect(() => {
+        setAnimate(true);
+    }, []);
+
     return (
-        <>
-        <div className="hero space-y-7 pt-12">
-            <div className="welcome-msg">
-            <h2 className='text-4xl font-bold'>
-                Welcome to <span className='text-green-600'>FreshCart</span>
-            </h2>
-            <p className='text-lg mt-2'>
-                Join thousands of happy customers who enjoy fresh groceries
-                delivered right to their doorstep.
-            </p>
-            </div>
+        <section className="relative hidden lg:flex items-center justify-center
+            bg-gradient-to-br from-green-900 via-emerald-700 to-green-500
+            rounded-l-3xl p-16 overflow-hidden text-white">
 
-            <div className="hero-list">
-                <ul className='space-y-5 *:flex *:items-center *:gap-3'>
-                    <li>
-                        <div className="list-icon size-12 rounded-full bg-green-200 text-xl flex justify-center items-center text-green-600">
-                            <FontAwesomeIcon icon={faStar} />
-                        </div>
-                        <div className="content">
-                            <h3 className='font-semibold'>Premium Quality</h3>
-                            <p className='text-gray-600'>Premium quality products sourced from trusted suppliers.</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="list-icon size-12 rounded-full bg-green-200 text-xl flex justify-center items-center text-green-600">
-                            <FontAwesomeIcon icon={faTruckFast} />
-                        </div>
-                        <div className="content">
-                            <h3 className='font-semibold'>Fast Delivery</h3>
-                            <p className='text-gray-600'>Fast and reliable delivery to your doorstep.</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="list-icon size-12 rounded-full bg-green-200 text-xl flex justify-center items-center text-green-600">
-                            <FontAwesomeIcon icon={faShieldHalved} />
-                        </div>
-                        <div className="content">
-                            <h3 className='font-semibold'>Secure Shopping</h3>
-                            <p className='text-gray-600'>your data and payments are completely secure.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            {/* Background */}
+            <div className="absolute w-96 h-96 bg-emerald-400/20 blur-3xl rounded-full top-[-80px] right-[-60px]" />
+            <div className="absolute w-80 h-80 bg-green-300/20 blur-3xl rounded-full bottom-[-60px] left-[-40px]" />
 
-            <div className="customer-review p-6 rounded-xl shadow-md">
-                <div className='flex items-center gap-3'>
-                    <Image src={reviewAuthorImg} className='size-12 rounded-full' alt="Customer Review Author" />
-                    <div>
-                        <h3>Sarah Johnson</h3>
-                        <div className="rating">
-                            <FontAwesomeIcon icon={faStar} className='text-yellow-400'/>
-                            <FontAwesomeIcon icon={faStar} className='text-yellow-400'/>
-                            <FontAwesomeIcon icon={faStar} className='text-yellow-400'/>
-                            <FontAwesomeIcon icon={faStar} className='text-yellow-400'/>
-                            <FontAwesomeIcon icon={faStar} className='text-yellow-400'/>
-                        </div>
+            <div className="relative grid grid-cols-1 gap-12 text-center max-w-lg">
+
+                {/* Icon Circle */}
+                <div className={`flex justify-center transition-all duration-700 ${
+                    animate ? "opacity-100 scale-100" : "opacity-0 scale-75"
+                }`}>
+                    <div className="w-30 h-30 flex items-center justify-center
+                        bg-white/10 backdrop-blur-lg rounded-2xl 
+                        border border-white/20 shadow-2xl">
+                        <FontAwesomeIcon icon={faUserPlus} className="text-4xl text-emerald-200" />
                     </div>
                 </div>
-                <blockquote className='text-gray-700 italic'>
-                    <p className='py-3'>“FreshCart has made grocery shopping so much easier. The quality of the products is outstanding and the delivery is always on time.”</p>
-                </blockquote>
+
+                {/* Heading */}
+                <div className={`transition-all duration-700 delay-200 transform ${
+                    animate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}>
+                    <h2 className="text-4xl font-bold leading-snug">
+                        Create Your <br /> FreshCart Account
+                    </h2>
+                </div>
+
+                {/* Description */}
+                <p className={`text-green-100 text-lg leading-relaxed transition-opacity duration-1000 delay-400 ${
+                    animate ? "opacity-100" : "opacity-0"
+                }`}>
+                    Discover a smarter way to shop groceries.
+                    Fresh produce, fast delivery, and secure checkout —
+                    all tailored for your lifestyle.
+                </p>
+
+                {/* Feature Row */}
+                <div className="grid grid-cols-3 gap-6 mt-6 text-sm">
+                    <div className="flex flex-col items-center space-y-2">
+                        <FontAwesomeIcon icon={faLeaf} className="text-emerald-200 w-5 h-5" />
+                        <span>Organic Picks</span>
+                    </div>
+
+                    <div className="flex flex-col items-center space-y-2">
+                        <FontAwesomeIcon icon={faTruck} className="text-emerald-200 w-5 h-5" />
+                        <span>Fast Delivery</span>
+                    </div>
+
+                    <div className="flex flex-col items-center space-y-2">
+                        <FontAwesomeIcon icon={faShieldHeart} className="text-emerald-200 w-5 h-5" />
+                        <span>Safe Checkout</span>
+                    </div>
+                </div>
+
+                {/* Bottom Decorative Line */}
+                <div className="mt-10 w-24 h-[2px] mx-auto 
+                    bg-gradient-to-r from-transparent via-white to-transparent 
+                    opacity-50" />
             </div>
-
-
-        </div>
-        </>
+        </section>
     );
 }
