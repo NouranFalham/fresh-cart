@@ -11,7 +11,7 @@ export default function ForgetPasswordHero() {
 
     return (
         <section
-        className={`relative flex flex-col justify-center items-center
+        className={`relative hidden lg:flex flex-col justify-center items-center
             bg-linear-to-br from-green-700 via-green-500 to-green-400
             rounded-l-3xl p-16   text-white overflow-hidden`}
         >
